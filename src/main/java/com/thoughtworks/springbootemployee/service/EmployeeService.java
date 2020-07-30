@@ -56,7 +56,14 @@ public class EmployeeService {
     }
 
     public Employee updateEmployee1(int id,EmployeeRequestDto employeeRequestDto) {
-        return null;
+        Company company = companyRepository.findById(employeeRequestDto.getCompanyId()).get();
+        Employee employee = new Employee();
+        employee.setCompany(company);
+        employee.setGender(employeeRequestDto.getGender());
+        employee.setAge(employeeRequestDto.getAge());
+        employee.setName(employeeRequestDto.getName());
+        employee.setId(id);
+        return employeeRepository.save(employee);
     }
 
 }

@@ -1,0 +1,158 @@
+package com.thoughtworks.springbootemployee.integrationtest;
+
+import com.thoughtworks.springbootemployee.entity.Company;
+import com.thoughtworks.springbootemployee.repository.CompanyRepository;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+public class CompanyIntegratingTest {
+
+    @Autowired
+    MockMvc mockMvc;
+
+    @Autowired
+    CompanyRepository companyRepository;
+
+    @AfterEach
+    void clean() {
+        companyRepository.deleteAll();
+    }
+
+    @Test
+    public void should_return_1_company_when_add_company_given_1_company() throws Exception {
+        String companyContent = "{\n" +
+                "    \"name\": \"cargosmart\"\n" +
+                "}";
+        mockMvc.perform(
+                post("/companies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(companyContent)).andExpect(status().isCreated());
+
+        List<Company> companies = companyRepository.findAll();
+        assertEquals(1, companies.size());
+    }
+
+    @Test
+    public void should_return_1_company_when_get_company_given_1_company() throws Exception {
+        String companyContent = "{\n" +
+                "    \"name\": \"cargosmart\"\n" +
+                "}";
+        mockMvc.perform(
+                post("/companies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(companyContent)).andExpect(status().isCreated());
+        mockMvc.perform(
+                get("/companies/1"))
+                .andExpect(status().isOk()).andExpect(jsonPath("name").value("cargosmart"));
+
+    }
+
+    @Test
+    public void should_return_1_company_when_update_company_given_1_company() throws Exception {
+        String companyContent = "{\n" +
+                "    \"name\": \"cargosmart\"\n" +
+                "}";
+        mockMvc.perform(
+                post("/companies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(companyContent)).andExpect(status().isCreated());
+
+        String updateCompanyContent = "{\n" +
+                "    \"name\": \"oocl\"\n" +
+                "}";
+        mockMvc.perform(
+                put("/companies/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updateCompanyContent))
+                .andExpect(status().isOk());
+        List<Company> companies = companyRepository.findAll();
+        assertEquals("oocl", companies.get(0).getName());
+    }
+
+    @Test
+    void should_return_0_company_when_delete_company_given_1_company() throws Exception {
+        String companyContent = "{\n" +
+                "    \"name\": \"cargosmart\"\n" +
+                "}";
+        mockMvc.perform(
+                post("/companies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(companyContent)).andExpect(status().isCreated());
+
+        mockMvc.perform(delete("/companies/1")).andExpect(status().isOk());
+        List<Company> companies = companyRepository.findAll();
+        assertEquals(0, companies.size());
+
+    }
+
+
+    @Test
+    void should_return_1_when_get_company_by_page_given_2_companies_and_page_0_size_1() throws Exception {
+        String companyContent1 = "{\n" +
+                "    \"name\": \"cargosmart\"\n" +
+                "}";
+        mockMvc.perform(
+                post("/companies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(companyContent1)).andExpect(status().isCreated());
+        String companyContent2 = "{\n" +
+                "    \"name\": \"oocl\"\n" +
+                "}";
+        mockMvc.perform(
+                post("/companies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(companyContent2)).andExpect(status().isCreated());
+        mockMvc
+                .perform(get("/companies?page=0&size=1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("numberOfElements").value(1));
+    }
+
+
+    @Test
+    void should_return_1_employee_when_get_employee_by_company_id_given_1_company() throws Exception {
+        String companyContent1 = "{\n" +
+                "    \"name\": \"cargosmart\"\n" +
+                "}";
+        mockMvc.perform(
+                post("/companies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(companyContent1)).andExpect(status().isCreated());
+        String employee = "{\n" +
+                "    \n" +
+                "    \"name\":\"lester\",\n" +
+                "    \"gender\": \"male\",\n" +
+                "    \"age\": 22,\n" +
+                "    \"companyId\": 1\n" +
+                "}";
+        mockMvc.perform(
+                post("/employees")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(employee)).andExpect(status().isCreated());
+
+
+        mockMvc.perform(get("/companies/1/employees"))
+                .andExpect(jsonPath("[0].name").value("lester"));
+
+    }
+
+
+}
