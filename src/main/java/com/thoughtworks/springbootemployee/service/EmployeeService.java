@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.dto.EmployeeDto;
+import com.thoughtworks.springbootemployee.dto.EmployeeRequestDto;
 import com.thoughtworks.springbootemployee.entity.Company;
 import com.thoughtworks.springbootemployee.entity.Employee;
 import com.thoughtworks.springbootemployee.exception.CompanyNotFoundException;
@@ -41,6 +42,10 @@ public class EmployeeService {
         Employee employee = employeeDto.to();
         employee.setCompany(company);
          employeeRepository.save(employee);
+    }
+
+    public Employee addEmployee1(EmployeeRequestDto employeeRequestDto) {
+        return null;
     }
 
     public Employee updateEmployee(EmployeeDto employeeDto) {

@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.dto.EmployeeDto;
+import com.thoughtworks.springbootemployee.dto.EmployeeRequestDto;
 import com.thoughtworks.springbootemployee.entity.Company;
 import com.thoughtworks.springbootemployee.entity.Employee;
 import com.thoughtworks.springbootemployee.exception.CompanyNotFoundException;
@@ -13,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -53,26 +53,26 @@ public class EmployeeServiceTest {
         when(employeeRepository.findById(employeeId)).thenReturn(Optional.empty());
         // when
         EmployeeNotFoundException employeeNotFoundException
-                = assertThrows(EmployeeNotFoundException.class, () -> employeeService.getEmployee(1), "EmployeeNotFoundException");
+                = assertThrows(EmployeeNotFoundException.class, () -> employeeService.getEmployee(1));
 
         // then
         assertEquals("EmployeeNotFoundException", employeeNotFoundException.getMessage());
     }
 
     @Test
-    public void should_return_1_employee_when_add_employee_given_1_employee_dto() {
+    public void should_return_1_employee_when_add_employee_given_1_employee_request_dto() {
         //given
-        EmployeeDto employeeDto = new EmployeeDto();
-        employeeDto.setId(1);
-        employeeDto.setName("LLL");
-        employeeDto.setAge(11);
-        employeeDto.setGender("male");
-        employeeDto.setCompanyId(1);
+        EmployeeRequestDto employeeRequestDto = new EmployeeRequestDto();
+        employeeRequestDto.setName("LLL");
+        employeeRequestDto.setAge(11);
+        employeeRequestDto.setGender("male");
+        employeeRequestDto.setCompanyId(1);
+
         when(companyRepository.findById(anyInt())).thenReturn(Optional.of(new Company()));
         //when
-        employeeService.addEmployee(employeeDto);
+        Employee employee = employeeService.addEmployee1(employeeRequestDto);
         //then
-        verify(employeeRepository, times(1)).save(any(Employee.class));
+        assertEquals("LLL", employee.getName());
     }
 
     @Test
@@ -87,7 +87,7 @@ public class EmployeeServiceTest {
         when(companyRepository.findById(anyInt())).thenReturn(Optional.empty());
         //when
         CompanyNotFoundException companyNotFoundException
-                = assertThrows(CompanyNotFoundException.class, () -> employeeService.addEmployee(employeeDto), "CompanyNotFoundException");
+                = assertThrows(CompanyNotFoundException.class, () -> employeeService.addEmployee(employeeDto));
         //then
         assertEquals("CompanyNotFoundException", companyNotFoundException.getMessage());
     }
