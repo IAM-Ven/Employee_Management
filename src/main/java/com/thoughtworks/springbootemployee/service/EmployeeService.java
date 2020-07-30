@@ -46,7 +46,7 @@ public class EmployeeService {
     }
 
     public Employee addEmployee1(EmployeeRequestDto employeeRequestDto) {
-        Company company = companyRepository.findById(employeeRequestDto.getCompanyId()).get();
+        Company company = companyRepository.findById(employeeRequestDto.getCompanyId()).orElseThrow(CompanyNotFoundException::new);
         Employee employee = new Employee();
         employee.setGender(employeeRequestDto.getGender());
         employee.setAge(employeeRequestDto.getAge());
