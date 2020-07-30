@@ -55,4 +55,8 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
+    public Employee updateEmployee1(int id,EmployeeRequestDto employeeRequestDto) {
+        return null;
+    }
+
 }

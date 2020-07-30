@@ -102,19 +102,26 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void should_return_employee_when_update_employee_given_1_employee_dto() {
+    public void should_return_employee_when_update_employee_given_1_employee_request_dto() {
         //given
-        EmployeeDto employeeDto = new EmployeeDto();
-        employeeDto.setId(1);
-        employeeDto.setName("LLL");
-        employeeDto.setAge(11);
-        employeeDto.setGender("male");
-        employeeDto.setCompanyId(1);
-        when(companyRepository.findById(anyInt())).thenReturn(Optional.of(new Company()));
+        Company company = new Company();
+
+        int id = 1;
+        Employee employee = new Employee();
+        employee.setName("LLL");
+        employee.setAge(11);
+        employee.setGender("male");
+
+        EmployeeRequestDto employeeRequestDto = new EmployeeRequestDto();
+        employeeRequestDto.setName("LLL");
+        employeeRequestDto.setAge(11);
+        employeeRequestDto.setGender("male");
+        employeeRequestDto.setCompanyId(1);
+        when(companyRepository.findById(anyInt())).thenReturn(Optional.of(company));
         //when
-        Employee updateEmployee = employeeService.updateEmployee(employeeDto);
+        Employee updateEmployee = employeeService.updateEmployee1(id, employeeRequestDto);
         //then
-        verify(employeeRepository,times(1)).save(any(Employee.class));
+        assertEquals("LLL",updateEmployee.getName());
     }
 
     @Test
