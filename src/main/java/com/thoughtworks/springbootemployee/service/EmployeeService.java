@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -38,14 +37,8 @@ public class EmployeeService {
         return employeeRepository.findAll(pageable);
     }
 
-    public void addEmployee(EmployeeDto employeeDto) {
-        Company company = companyRepository.findById(employeeDto.getCompanyId()).orElseThrow(CompanyNotFoundException::new);
-        Employee employee = employeeDto.to();
-        employee.setCompany(company);
-         employeeRepository.save(employee);
-    }
 
-    public Employee addEmployee1(EmployeeRequestDto employeeRequestDto) {
+    public Employee addEmployee(EmployeeRequestDto employeeRequestDto) {
         Company company = companyRepository.findById(employeeRequestDto.getCompanyId()).orElseThrow(CompanyNotFoundException::new);
         Employee employee = new Employee();
         employee.setGender(employeeRequestDto.getGender());

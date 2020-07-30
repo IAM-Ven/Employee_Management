@@ -80,7 +80,7 @@ public class EmployeeServiceTest {
         when(companyRepository.findById(anyInt())).thenReturn(Optional.of(company));
         when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
         //when
-        Employee employeeSaved = employeeService.addEmployee1(employeeRequestDto);
+        Employee employeeSaved = employeeService.addEmployee(employeeRequestDto);
         //then
         assertEquals("LLL", employeeSaved.getName());
     }
@@ -96,7 +96,7 @@ public class EmployeeServiceTest {
         when(companyRepository.findById(anyInt())).thenReturn(Optional.empty());
         //when
         CompanyNotFoundException companyNotFoundException
-                = assertThrows(CompanyNotFoundException.class, () -> employeeService.addEmployee1(employeeRequestDto));
+                = assertThrows(CompanyNotFoundException.class, () -> employeeService.addEmployee(employeeRequestDto));
         //then
         assertEquals("CompanyNotFoundException", companyNotFoundException.getMessage());
     }

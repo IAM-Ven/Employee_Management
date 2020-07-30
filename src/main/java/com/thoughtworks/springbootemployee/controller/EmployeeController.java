@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.dto.EmployeeDto;
+import com.thoughtworks.springbootemployee.dto.EmployeeRequestDto;
 import com.thoughtworks.springbootemployee.entity.Employee;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
 import org.springframework.data.domain.Page;
@@ -39,8 +40,8 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public void addEmployee(@RequestBody EmployeeDto employeeDto) {
-         employeeService.addEmployee(employeeDto);
+    public void addEmployee(@RequestBody EmployeeRequestDto employeeRequestDto) {
+         employeeService.addEmployee(employeeRequestDto);
     }
 
     @PutMapping("/{id}")
