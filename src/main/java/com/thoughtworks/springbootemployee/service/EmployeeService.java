@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -45,7 +46,13 @@ public class EmployeeService {
     }
 
     public Employee addEmployee1(EmployeeRequestDto employeeRequestDto) {
-        return null;
+        Company company = companyRepository.findById(employeeRequestDto.getCompanyId()).get();
+        Employee employee = new Employee();
+        employee.setGender(employeeRequestDto.getGender());
+        employee.setAge(employeeRequestDto.getAge());
+        employee.setName(employeeRequestDto.getName());
+        employee.setCompany(company);
+        return employeeRepository.save(employee);
     }
 
     public Employee updateEmployee(EmployeeDto employeeDto) {

@@ -62,17 +62,27 @@ public class EmployeeServiceTest {
     @Test
     public void should_return_1_employee_when_add_employee_given_1_employee_request_dto() {
         //given
+        Company company = new Company();
+
         EmployeeRequestDto employeeRequestDto = new EmployeeRequestDto();
         employeeRequestDto.setName("LLL");
         employeeRequestDto.setAge(11);
         employeeRequestDto.setGender("male");
         employeeRequestDto.setCompanyId(1);
 
-        when(companyRepository.findById(anyInt())).thenReturn(Optional.of(new Company()));
+        Employee employee = new Employee();
+        employee.setName("LLL");
+        employee.setAge(11);
+        employee.setGender("male");
+        employee.setCompany(company);
+
+
+        when(companyRepository.findById(anyInt())).thenReturn(Optional.of(company));
+        when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
         //when
-        Employee employee = employeeService.addEmployee1(employeeRequestDto);
+        Employee employeeSaved = employeeService.addEmployee1(employeeRequestDto);
         //then
-        assertEquals("LLL", employee.getName());
+        assertEquals("LLL", employeeSaved.getName());
     }
 
     @Test
