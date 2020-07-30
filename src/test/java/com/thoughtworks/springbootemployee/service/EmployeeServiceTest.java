@@ -88,16 +88,15 @@ public class EmployeeServiceTest {
     @Test
     public void should_throw_exception_when_add_employee_given_1_employee_dto_and_company_is_not_exist() {
         //given
-        EmployeeDto employeeDto = new EmployeeDto();
-        employeeDto.setId(1);
-        employeeDto.setName("LLL");
-        employeeDto.setAge(11);
-        employeeDto.setGender("male");
-        employeeDto.setCompanyId(1);
+        EmployeeRequestDto employeeRequestDto = new EmployeeRequestDto();
+        employeeRequestDto.setName("LLL");
+        employeeRequestDto.setAge(11);
+        employeeRequestDto.setGender("male");
+        employeeRequestDto.setCompanyId(1);
         when(companyRepository.findById(anyInt())).thenReturn(Optional.empty());
         //when
         CompanyNotFoundException companyNotFoundException
-                = assertThrows(CompanyNotFoundException.class, () -> employeeService.addEmployee(employeeDto));
+                = assertThrows(CompanyNotFoundException.class, () -> employeeService.addEmployee1(employeeRequestDto));
         //then
         assertEquals("CompanyNotFoundException", companyNotFoundException.getMessage());
     }
