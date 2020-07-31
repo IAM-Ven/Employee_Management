@@ -57,19 +57,14 @@ public class CompanyIntegrationTest {
 
     @Test
     public void should_return_1_company_when_update_company_given_1_company() throws Exception {
-        String companyContent = "{\n" +
-                "    \"name\": \"cargosmart\"\n" +
-                "}";
-        mockMvc.perform(
-                post("/companies")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(companyContent)).andExpect(status().isCreated());
+        Company company = new Company();
+        company.setName("cargosmart");
 
-        String updateCompanyContent = "{\n" +
-                "    \"name\": \"oocl\"\n" +
-                "}";
+        company = companyRepository.save(company);
+
+        String updateCompanyContent = "{\"name\":\"oocl\"}";
         mockMvc.perform(
-                put("/companies/1")
+                put("/companies/" + company.getCompanyId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updateCompanyContent))
                 .andExpect(status().isOk());
