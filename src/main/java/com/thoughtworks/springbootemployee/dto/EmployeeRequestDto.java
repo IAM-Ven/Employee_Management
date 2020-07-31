@@ -1,9 +1,19 @@
 package com.thoughtworks.springbootemployee.dto;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+
 public class EmployeeRequestDto {
 
+    @NotBlank
     private String name;
+
+    @Max(200)
+    @Min(0)
     private int age;
+
     private int companyId;
     private String gender;
 
