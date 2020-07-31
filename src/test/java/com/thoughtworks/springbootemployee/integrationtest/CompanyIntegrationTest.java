@@ -87,22 +87,15 @@ public class CompanyIntegrationTest {
 
     @Test
     void should_return_1_when_get_company_by_page_given_2_companies_and_page_0_size_1() throws Exception {
-        String companyContent1 = "{\n" +
-                "    \"name\": \"cargosmart\"\n" +
-                "}";
-        mockMvc.perform(
-                post("/companies")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(companyContent1)).andExpect(status().isCreated());
-        String companyContent2 = "{\n" +
-                "    \"name\": \"oocl\"\n" +
-                "}";
-        mockMvc.perform(
-                post("/companies")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(companyContent2)).andExpect(status().isCreated());
-        mockMvc
-                .perform(get("/companies?page=0&size=1"))
+        Company company1 = new Company();
+        company1.setName("cargosmart");
+        companyRepository.save(company1);
+
+        Company company2 = new Company();
+        company2.setName("oocl");
+        companyRepository.save(company2);
+
+        mockMvc.perform(get("/companies?page=0&size=1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("numberOfElements").value(1));
     }
