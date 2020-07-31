@@ -1,7 +1,9 @@
 package com.thoughtworks.springbootemployee.integrationtest;
 
 import com.thoughtworks.springbootemployee.entity.Company;
+import com.thoughtworks.springbootemployee.entity.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +29,12 @@ public class CompanyIntegrationTest {
     @Autowired
     CompanyRepository companyRepository;
 
+    @Autowired
+    EmployeeRepository employeeRepository;
+
     @AfterEach
     void clean() {
+        employeeRepository.deleteAll();
         companyRepository.deleteAll();
     }
 
@@ -103,28 +109,19 @@ public class CompanyIntegrationTest {
 
     @Test
     void should_return_1_employee_when_get_employee_by_company_id_given_1_company() throws Exception {
-        String companyContent1 = "{\n" +
-                "    \"name\": \"cargosmart\"\n" +
-                "}";
-        mockMvc.perform(
-                post("/companies")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(companyContent1)).andExpect(status().isCreated());
-        String employee = "{\n" +
-                "    \n" +
-                "    \"name\":\"lester\",\n" +
-                "    \"gender\": \"male\",\n" +
-                "    \"age\": 22,\n" +
-                "    \"companyId\": 1\n" +
-                "}";
-        mockMvc.perform(
-                post("/employees")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(employee)).andExpect(status().isCreated());
+        Company company = new Company();
+        company.setName("cargosmart");
+        company = companyRepository.save(company);
 
-        mockMvc.perform(get("/companies/1/employees"))
+        Employee employee = new Employee();
+        employee.setName("lester");
+        employee.setAge(22);
+        employee.setGender("male");
+        employee.setCompany(company);
+        employeeRepository.save(employee);
+
+        mockMvc.perform(get("/companies/ " + company.getCompanyId() + "/employees"))
                 .andExpect(jsonPath("[0].name").value("lester"));
-
     }
 
 
