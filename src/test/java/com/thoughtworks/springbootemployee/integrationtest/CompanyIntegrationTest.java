@@ -34,9 +34,7 @@ public class CompanyIntegrationTest {
 
     @Test
     public void should_return_1_company_when_add_company_given_1_company() throws Exception {
-        String companyContent = "{\n" +
-                "    \"name\": \"cargosmart\"\n" +
-                "}";
+        String companyContent = "{\"name\":\"cargosmart\"}";
         mockMvc.perform(
                 post("/companies")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -48,15 +46,11 @@ public class CompanyIntegrationTest {
 
     @Test
     public void should_return_1_company_when_get_company_given_1_company() throws Exception {
-        String companyContent = "{\n" +
-                "    \"name\": \"cargosmart\"\n" +
-                "}";
+        Company company = new Company();
+        company.setName("cargosmart");
+        company = companyRepository.save(company);
         mockMvc.perform(
-                post("/companies")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(companyContent)).andExpect(status().isCreated());
-        mockMvc.perform(
-                get("/companies/1"))
+                get("/companies/" + company.getCompanyId()))
                 .andExpect(status().isOk()).andExpect(jsonPath("name").value("cargosmart"));
 
     }
