@@ -74,18 +74,14 @@ public class CompanyIntegrationTest {
 
     @Test
     void should_return_0_company_when_delete_company_given_1_company() throws Exception {
-        String companyContent = "{\n" +
-                "    \"name\": \"cargosmart\"\n" +
-                "}";
-        mockMvc.perform(
-                post("/companies")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(companyContent)).andExpect(status().isCreated());
+        Company company = new Company();
+        company.setName("cargosmart");
 
-        mockMvc.perform(delete("/companies/1")).andExpect(status().isOk());
+        company = companyRepository.save(company);
+
+        mockMvc.perform(delete("/companies/" + company.getCompanyId())).andExpect(status().isOk());
         List<Company> companies = companyRepository.findAll();
         assertEquals(0, companies.size());
-
     }
 
 
