@@ -3,16 +3,12 @@ package com.thoughtworks.springbootemployee.integrationtest;
 import com.thoughtworks.springbootemployee.entity.Company;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
@@ -23,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CompanyIntegratingTest {
+public class CompanyIntegrationTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -147,7 +143,6 @@ public class CompanyIntegratingTest {
                 post("/employees")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(employee)).andExpect(status().isCreated());
-
 
         mockMvc.perform(get("/companies/1/employees"))
                 .andExpect(jsonPath("[0].name").value("lester"));
