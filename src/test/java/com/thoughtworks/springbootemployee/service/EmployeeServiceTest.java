@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -137,7 +138,7 @@ public class EmployeeServiceTest {
 
   @Test
   public void
-      should_return_1_employee_when_get_employees_by_page_and_given_0_size_1_and_1_employee() {
+      should_return_1_employee_when_get_employees_by_page_and_given_page_0_size_1_and_1_employee() {
     // given
     Employee employee = new Employee();
     Pageable pageable = PageRequest.of(0, 1, Sort.Direction.DESC, "name");
@@ -145,8 +146,19 @@ public class EmployeeServiceTest {
         .thenReturn(new PageImpl<>(Collections.singletonList(employee)));
     // when
     Page<Employee> employeePage = employeeService.getEmployeeByPage(pageable);
-
     // then
     assertEquals(1, employeePage.getNumberOfElements());
+  }
+
+  @Test
+  public void
+      should_return_0_employee_when_get_employees_by_page_and_given_page_0_size_1_and_0_employee() {
+    // given
+    Pageable pageable = PageRequest.of(0, 1, Sort.Direction.DESC, "name");
+    when(employeeRepository.findAll(pageable)).thenReturn(new PageImpl<>(new ArrayList<>()));
+    // when
+    Page<Employee> employeePage = employeeService.getEmployeeByPage(pageable);
+    // then
+    assertEquals(0, employeePage.getNumberOfElements());
   }
 }
