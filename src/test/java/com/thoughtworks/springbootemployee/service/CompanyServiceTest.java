@@ -9,13 +9,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+import static java.util.Optional.of;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -39,7 +37,7 @@ public class CompanyServiceTest {
     employee2.setCompany(company);
     company.getEmployees().add(employee1);
     company.getEmployees().add(employee2);
-    when(companyRepository.findById(1)).thenReturn(java.util.Optional.of(company));
+    when(companyRepository.findById(1)).thenReturn(of(company));
     // when
     List<Employee> employees = companyService.getEmployeeUnderCompany(company.getCompanyId());
     // then
@@ -52,7 +50,7 @@ public class CompanyServiceTest {
     Company company = new Company();
     company.setCompanyId(1);
     company.setEmployees(new ArrayList<>());
-    when(companyRepository.findById(1)).thenReturn(java.util.Optional.of(company));
+    when(companyRepository.findById(1)).thenReturn(of(company));
     // when
     List<Employee> employees = companyService.getEmployeeUnderCompany(company.getCompanyId());
     // then
@@ -63,7 +61,6 @@ public class CompanyServiceTest {
   public void
       should_be_return_exception_employees_when_get_employees_under_company_given_no_company() {
     // given
-    Company company = null;
     when(companyRepository.findById(1)).thenReturn(Optional.empty());
     // when
     CompanyNotFoundException companyNotFoundException =
@@ -126,7 +123,7 @@ public class CompanyServiceTest {
     // given
     int companyId = 1;
     Company company = new Company();
-    when(companyRepository.findById(companyId)).thenReturn(Optional.of(company));
+    when(companyRepository.findById(companyId)).thenReturn(of(company));
 
     // when
     Company getCompany = companyService.getCompany(companyId);
@@ -136,8 +133,16 @@ public class CompanyServiceTest {
   }
 
   @Test
-  void test() {
-    when(companyRepository.findAll(any(Pageable.class)))
-        .thenReturn(new PageImpl(new ArrayList<>()));
+  void should_get_1_company_when_get_company_by_page_given_page_0_size_1_and_1_company() {
+    // given
+    Company company = new Company();
+    company.setName("oocl");
+    Pageable pageable = PageRequest.of(0, 1, Sort.Direction.DESC, "name");
+
+    when(companyRepository.findAll(pageable)).thenReturn(new PageImpl<>(Collections.singletonList(company)));
+    // when
+    Page<Company> companyPage = companyService.getCompaniesByPage(pageable);
+    // then
+    assertEquals(1, companyPage.getNumberOfElements());
   }
 }
