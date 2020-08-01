@@ -38,5 +38,7 @@ public class GlobalControllerExceptionHandle {
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler(Exception.class)
-  public void handleOthers() {}
+  public String handleOthers(Exception e) {
+    return String.format("%s : %s", e.getCause(), e.getMessage());
+  }
 }

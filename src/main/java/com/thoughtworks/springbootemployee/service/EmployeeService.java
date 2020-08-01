@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.dto.EmployeeRequestDto;
+import com.thoughtworks.springbootemployee.dto.EmployeeResponseDto;
 import com.thoughtworks.springbootemployee.entity.Company;
 import com.thoughtworks.springbootemployee.entity.Employee;
 import com.thoughtworks.springbootemployee.exception.CompanyNotFoundException;
@@ -25,8 +26,15 @@ public class EmployeeService {
     this.companyRepository = companyRepository;
   }
 
-  public Employee getEmployee(int id) {
-    return employeeRepository.findById(id).orElseThrow(EmployeeNotFoundException::new);
+  public EmployeeResponseDto getEmployee(int id) {
+    Employee employee = employeeRepository.findById(id).orElseThrow(EmployeeNotFoundException::new);
+    EmployeeResponseDto employeeResponseDto = new EmployeeResponseDto();
+    employeeResponseDto.setId(employee.getId());
+    employeeResponseDto.setAge(employee.getAge());
+    employeeResponseDto.setCompanyId(employee.getCompany().getCompanyId());
+    employeeResponseDto.setName(employee.getName());
+    employeeResponseDto.setGender(employee.getGender());
+    return employeeResponseDto;
   }
 
   public List<Employee> getEmployeeByGender(String gender) {

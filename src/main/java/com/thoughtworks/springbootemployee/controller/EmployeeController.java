@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.dto.EmployeeRequestDto;
+import com.thoughtworks.springbootemployee.dto.EmployeeResponseDto;
 import com.thoughtworks.springbootemployee.entity.Employee;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
 import org.springframework.data.domain.Page;
@@ -23,7 +24,7 @@ public class EmployeeController {
   }
 
   @GetMapping("/{id}")
-  public Employee getEmployee(@PathVariable int id) {
+  public EmployeeResponseDto getEmployee(@PathVariable int id) {
     return employeeService.getEmployee(id);
   }
 
