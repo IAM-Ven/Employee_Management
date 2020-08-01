@@ -124,6 +124,24 @@ public class EmployeeServiceTest {
   }
 
   @Test
+  public void
+  should_throw_exception_when_update_employee_given_1_employee_dto_and_company_is_not_exist() {
+    // given
+    EmployeeRequestDto employeeRequestDto = new EmployeeRequestDto();
+    employeeRequestDto.setName("LLL");
+    employeeRequestDto.setAge(11);
+    employeeRequestDto.setGender("male");
+    employeeRequestDto.setCompanyId(1);
+    when(companyRepository.findById(anyInt())).thenReturn(Optional.empty());
+    // when
+    CompanyNotFoundException companyNotFoundException =
+            assertThrows(
+                    CompanyNotFoundException.class, () -> employeeService.updateEmployee(1, employeeRequestDto));
+    // then
+    assertEquals("CompanyNotFoundException", companyNotFoundException.getMessage());
+  }
+
+  @Test
   public void should_return_employee_when_employee_by_gender_given_male() {
     // given
     Employee employee = new Employee();
