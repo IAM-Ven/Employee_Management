@@ -1,6 +1,5 @@
 package com.thoughtworks.springbootemployee.controller;
 
-import com.thoughtworks.springbootemployee.dto.EmployeeDto;
 import com.thoughtworks.springbootemployee.dto.EmployeeRequestDto;
 import com.thoughtworks.springbootemployee.entity.Employee;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
@@ -50,9 +49,8 @@ public class EmployeeController {
   }
 
   @PutMapping("/{id}")
-  public void updateEmployee(@PathVariable int id, @RequestBody EmployeeDto employeeDto) {
-    employeeDto.setId(id);
-    employeeService.updateEmployee(employeeDto);
+  public void updateEmployee(@PathVariable int id, @RequestBody EmployeeRequestDto employeeRequestDto) {
+    employeeService.updateEmployee(id, employeeRequestDto);
   }
 
   @DeleteMapping("/{id}")

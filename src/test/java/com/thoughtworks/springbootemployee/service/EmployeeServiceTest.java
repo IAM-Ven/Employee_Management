@@ -118,7 +118,7 @@ public class EmployeeServiceTest {
     employeeRequestDto.setCompanyId(1);
     when(companyRepository.findById(anyInt())).thenReturn(Optional.of(company));
     // when
-    Employee updateEmployee = employeeService.updateEmployee1(id, employeeRequestDto);
+    Employee updateEmployee = employeeService.updateEmployee(id, employeeRequestDto);
     // then
     assertEquals("LLL", updateEmployee.getName());
   }

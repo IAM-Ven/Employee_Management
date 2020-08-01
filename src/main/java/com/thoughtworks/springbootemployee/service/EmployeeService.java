@@ -51,16 +51,10 @@ public class EmployeeService {
     return employeeRepository.save(employee);
   }
 
-  public Employee updateEmployee(EmployeeDto employeeDto) {
-    Company company = companyRepository.findById(employeeDto.getCompanyId()).get();
-    Employee employee = employeeDto.to();
-    employee.setCompany(company);
-    return employeeRepository.save(employee);
-  }
-
-  public Employee updateEmployee1(int id, EmployeeRequestDto employeeRequestDto) {
+  public Employee updateEmployee(int id, EmployeeRequestDto employeeRequestDto) {
     Company company = companyRepository.findById(employeeRequestDto.getCompanyId()).get();
     Employee employee = new Employee();
+    employee.setId(id);
     employee.setCompany(company);
     employee.setGender(employeeRequestDto.getGender());
     employee.setAge(employeeRequestDto.getAge());
