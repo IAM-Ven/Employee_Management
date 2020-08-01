@@ -1,7 +1,6 @@
 package com.thoughtworks.springbootemployee.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.thoughtworks.springbootemployee.dto.EmployeeDto;
 
 import javax.persistence.*;
 

@@ -12,17 +12,10 @@ public class EmployeeRequestDto {
   @Min(0)
   private int age;
 
-  private int companyId;
-  private String gender;
+  @NotBlank private int companyId;
+  @NotBlank private String gender;
 
   public EmployeeRequestDto() {}
-
-  public EmployeeRequestDto(String name, int age, int companyId, String gender) {
-    this.name = name;
-    this.age = age;
-    this.companyId = companyId;
-    this.gender = gender;
-  }
 
   public String getName() {
     return name;
