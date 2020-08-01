@@ -48,7 +48,6 @@ public class EmployeeServiceTest {
   public void should_throw_exception_when_get_employee_given_employee_id_1() {
     // given
     int employeeId = 1;
-    Employee employee = new Employee();
     when(employeeRepository.findById(employeeId)).thenReturn(Optional.empty());
     // when
     EmployeeNotFoundException employeeNotFoundException =

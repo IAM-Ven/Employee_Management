@@ -151,8 +151,7 @@ public class CompanyServiceTest {
   void should_get_0_company_when_get_company_by_page_given_page_0_size_1_and_1_company() {
     // given
     Pageable pageable = PageRequest.of(0, 1, Sort.Direction.DESC, "name");
-    when(companyRepository.findAll(pageable))
-            .thenReturn(new PageImpl<>(new ArrayList<>()));
+    when(companyRepository.findAll(pageable)).thenReturn(new PageImpl<>(new ArrayList<>()));
 
     // when
     Page<Company> companyPage = companyService.getCompaniesByPage(pageable);
