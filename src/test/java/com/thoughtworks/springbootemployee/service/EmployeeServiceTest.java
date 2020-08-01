@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -132,5 +133,20 @@ public class EmployeeServiceTest {
     List<Employee> maleEmployee = employeeService.getEmployeeByGender("male");
     // then
     assertEquals(1, maleEmployee.size());
+  }
+
+  @Test
+  public void
+      should_return_1_employee_when_get_employees_by_page_and_given_0_size_1_and_1_employee() {
+    // given
+    Employee employee = new Employee();
+    Pageable pageable = PageRequest.of(0, 1, Sort.Direction.DESC, "name");
+    when(employeeRepository.findAll(pageable))
+        .thenReturn(new PageImpl<>(Collections.singletonList(employee)));
+    // when
+    Page<Employee> employeePage = employeeService.getEmployeeByPage(pageable);
+
+    // then
+    assertEquals(1, employeePage.getNumberOfElements());
   }
 }
