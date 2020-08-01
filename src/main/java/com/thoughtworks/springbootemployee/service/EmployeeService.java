@@ -9,10 +9,12 @@ import com.thoughtworks.springbootemployee.exception.EmployeeNotFoundException;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -37,8 +39,19 @@ public class EmployeeService {
     return employeeResponseDto;
   }
 
-  public List<Employee> getEmployeeByGender(String gender) {
-    return employeeRepository.findByGender(gender);
+  public List<EmployeeResponseDto> getEmployeeByGender(String gender) {
+    return employeeRepository.findByGender(gender).stream()
+        .map(
+            employee -> {
+              EmployeeResponseDto employeeResponseDto = new EmployeeResponseDto();
+              employeeResponseDto.setId(employee.getId());
+              employeeResponseDto.setGender(employee.getGender());
+              employeeResponseDto.setName(employee.getName());
+              employeeResponseDto.setAge(employee.getAge());
+              employeeResponseDto.setCompanyId(employee.getCompany().getCompanyId());
+              return employeeResponseDto;
+            })
+        .collect(Collectors.toList());
   }
 
   public Page<Employee> getEmployeeByPage(Pageable pageable) {
@@ -69,7 +82,6 @@ public class EmployeeService {
     employee.setGender(employeeRequestDto.getGender());
     employee.setAge(employeeRequestDto.getAge());
     employee.setName(employeeRequestDto.getName());
-    employee.setId(id);
     return employeeRepository.save(employee);
   }
 

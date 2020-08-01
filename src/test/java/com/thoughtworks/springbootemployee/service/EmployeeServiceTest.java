@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.dto.EmployeeRequestDto;
+import com.thoughtworks.springbootemployee.dto.EmployeeResponseDto;
 import com.thoughtworks.springbootemployee.entity.Company;
 import com.thoughtworks.springbootemployee.entity.Employee;
 import com.thoughtworks.springbootemployee.exception.CompanyNotFoundException;
@@ -35,10 +36,11 @@ public class EmployeeServiceTest {
     // given
     int employeeId = 1;
     Employee employee = new Employee();
+    employee.setCompany(new Company());
     when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
 
     // when
-    Employee getEmployee = employeeService.getEmployee(employeeId);
+    EmployeeResponseDto getEmployee = employeeService.getEmployee(employeeId);
 
     // then
     assertNotNull(getEmployee);
@@ -117,6 +119,7 @@ public class EmployeeServiceTest {
     employeeRequestDto.setGender("male");
     employeeRequestDto.setCompanyId(1);
     when(companyRepository.findById(anyInt())).thenReturn(Optional.of(company));
+    when(employeeRepository.save(any())).thenReturn(employee);
     // when
     Employee updateEmployee = employeeService.updateEmployee(id, employeeRequestDto);
     // then
@@ -146,9 +149,10 @@ public class EmployeeServiceTest {
     // given
     Employee employee = new Employee();
     employee.setGender("male");
+    employee.setCompany(new Company());
     when(employeeRepository.findByGender("male")).thenReturn(Collections.singletonList(employee));
     // when
-    List<Employee> maleEmployee = employeeService.getEmployeeByGender("male");
+    List<EmployeeResponseDto> maleEmployee = employeeService.getEmployeeByGender("male");
     // then
     assertEquals(1, maleEmployee.size());
   }

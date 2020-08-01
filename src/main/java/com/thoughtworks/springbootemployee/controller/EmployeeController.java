@@ -29,7 +29,7 @@ public class EmployeeController {
   }
 
   @GetMapping(params = "gender")
-  public List<Employee> findByGender(@RequestParam String gender) {
+  public List<EmployeeResponseDto> findByGender(@RequestParam String gender) {
     return employeeService.getEmployeeByGender(gender);
   }
 
