@@ -14,30 +14,32 @@ import java.util.List;
 @Service
 public class CompanyService {
 
-    @Autowired
-    CompanyRepository companyRepository;
+  @Autowired CompanyRepository companyRepository;
 
-    public Page<Company> getCompaniesByPage(Pageable pageable) {
-        return companyRepository.findAll(pageable);
-    }
+  public Page<Company> getCompaniesByPage(Pageable pageable) {
+    return companyRepository.findAll(pageable);
+  }
 
-    public List<Employee> getEmployeeUnderCompany(int companyId) {
-        return companyRepository.findById(companyId).orElseThrow(CompanyNotFoundException::new).getEmployees();
-    }
+  public List<Employee> getEmployeeUnderCompany(int companyId) {
+    return companyRepository
+        .findById(companyId)
+        .orElseThrow(CompanyNotFoundException::new)
+        .getEmployees();
+  }
 
-    public Company getCompany(int id) {
-        return companyRepository.findById(id).orElseThrow(CompanyNotFoundException::new);
-    }
+  public Company getCompany(int id) {
+    return companyRepository.findById(id).orElseThrow(CompanyNotFoundException::new);
+  }
 
-    public Company addCompany(Company company) {
-        return companyRepository.save(company);
-    }
+  public Company addCompany(Company company) {
+    return companyRepository.save(company);
+  }
 
-    public Company updateCompany(Company company) {
-        return companyRepository.save(company);
-    }
+  public Company updateCompany(Company company) {
+    return companyRepository.save(company);
+  }
 
-    public void deleteCompany(int id) {
-        companyRepository.deleteById(id);
-    }
+  public void deleteCompany(int id) {
+    companyRepository.deleteById(id);
+  }
 }

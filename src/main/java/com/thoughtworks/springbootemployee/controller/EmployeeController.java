@@ -17,44 +17,46 @@ import java.util.List;
 @RequestMapping("/employees")
 public class EmployeeController {
 
-    private final EmployeeService employeeService;
+  private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
-    }
+  public EmployeeController(EmployeeService employeeService) {
+    this.employeeService = employeeService;
+  }
 
-    @GetMapping("/{id}")
-    public Employee getEmployee(@PathVariable int id) {
-        return employeeService.getEmployee(id);
-    }
+  @GetMapping("/{id}")
+  public Employee getEmployee(@PathVariable int id) {
+    return employeeService.getEmployee(id);
+  }
 
-    @GetMapping(params = "gender")
-    public List<Employee> findByGender(@RequestParam String gender) {
-        return employeeService.getEmployeeByGender(gender);
-    }
+  @GetMapping(params = "gender")
+  public List<Employee> findByGender(@RequestParam String gender) {
+    return employeeService.getEmployeeByGender(gender);
+  }
 
-    @GetMapping
-    public Page<Employee> getEmployeeByPage(@PageableDefault(size = 1) Pageable pageable, @RequestParam(defaultValue = "false") boolean unpaged) {
-        if (unpaged) {
-            return employeeService.getEmployeeByPage(Pageable.unpaged());
-        }
-        return employeeService.getEmployeeByPage(pageable);
+  @GetMapping
+  public Page<Employee> getEmployeeByPage(
+      @PageableDefault(size = 1) Pageable pageable,
+      @RequestParam(defaultValue = "false") boolean unpaged) {
+    if (unpaged) {
+      return employeeService.getEmployeeByPage(Pageable.unpaged());
     }
+    return employeeService.getEmployeeByPage(pageable);
+  }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void addEmployee(@RequestBody @Valid EmployeeRequestDto employeeRequestDto) {
-         employeeService.addEmployee(employeeRequestDto);
-    }
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public void addEmployee(@RequestBody @Valid EmployeeRequestDto employeeRequestDto) {
+    employeeService.addEmployee(employeeRequestDto);
+  }
 
-    @PutMapping("/{id}")
-    public void updateEmployee(@PathVariable int id, @RequestBody EmployeeDto employeeDto) {
-        employeeDto.setId(id);
-        employeeService.updateEmployee(employeeDto);
-    }
+  @PutMapping("/{id}")
+  public void updateEmployee(@PathVariable int id, @RequestBody EmployeeDto employeeDto) {
+    employeeDto.setId(id);
+    employeeService.updateEmployee(employeeDto);
+  }
 
-    @DeleteMapping("/{id}")
-    public void deleteEmployee(@PathVariable int id) {
-        employeeService.deleteEmployee(id);
-    }
+  @DeleteMapping("/{id}")
+  public void deleteEmployee(@PathVariable int id) {
+    employeeService.deleteEmployee(id);
+  }
 }

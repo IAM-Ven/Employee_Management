@@ -15,44 +15,46 @@ import java.util.List;
 @RequestMapping("/companies")
 public class CompanyController {
 
-    private final CompanyService companyService;
+  private final CompanyService companyService;
 
-    public CompanyController(CompanyService companyService) {
-        this.companyService = companyService;
-    }
+  public CompanyController(CompanyService companyService) {
+    this.companyService = companyService;
+  }
 
-    @GetMapping
-    public Page<Company> getCompanyByPage(@PageableDefault(size = 1) Pageable pageable, @RequestParam(defaultValue = "false") boolean unpaged) {
-        if (unpaged) {
-            return companyService.getCompaniesByPage(Pageable.unpaged());
-        }
-        return companyService.getCompaniesByPage(pageable);
+  @GetMapping
+  public Page<Company> getCompanyByPage(
+      @PageableDefault(size = 1) Pageable pageable,
+      @RequestParam(defaultValue = "false") boolean unpaged) {
+    if (unpaged) {
+      return companyService.getCompaniesByPage(Pageable.unpaged());
     }
+    return companyService.getCompaniesByPage(pageable);
+  }
 
-    @GetMapping("/{id}/employees")
-    public List<Employee> getEmployeesByCompanyId(@PathVariable int id) {
-        return companyService.getEmployeeUnderCompany(id);
-    }
+  @GetMapping("/{id}/employees")
+  public List<Employee> getEmployeesByCompanyId(@PathVariable int id) {
+    return companyService.getEmployeeUnderCompany(id);
+  }
 
-    @GetMapping("/{id}")
-    public Company getCompany(@PathVariable int id) {
-        return companyService.getCompany(id);
-    }
+  @GetMapping("/{id}")
+  public Company getCompany(@PathVariable int id) {
+    return companyService.getCompany(id);
+  }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void addCompany(@RequestBody Company company) {
-        companyService.addCompany(company);
-    }
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public void addCompany(@RequestBody Company company) {
+    companyService.addCompany(company);
+  }
 
-    @PutMapping("/{id}")
-    public void updateCompany(@PathVariable int id, @RequestBody Company company) {
-        company.setCompanyId(id);
-        companyService.updateCompany(company);
-    }
+  @PutMapping("/{id}")
+  public void updateCompany(@PathVariable int id, @RequestBody Company company) {
+    company.setCompanyId(id);
+    companyService.updateCompany(company);
+  }
 
-    @DeleteMapping("/{id}")
-    public void deleteCompany(@PathVariable int id) {
-        companyService.deleteCompany(id);
-    }
+  @DeleteMapping("/{id}")
+  public void deleteCompany(@PathVariable int id) {
+    companyService.deleteCompany(id);
+  }
 }

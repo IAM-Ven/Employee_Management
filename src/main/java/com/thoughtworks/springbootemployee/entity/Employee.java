@@ -8,51 +8,52 @@ import javax.persistence.*;
 @Entity
 @Table(name = "employee")
 public class Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private String name;
-    private int age;
-    private String gender;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "company_id")
-    private Company company;
+  private String name;
+  private int age;
+  private String gender;
 
-    public int getId() {
-        return id;
-    }
+  @JsonIgnore
+  @ManyToOne
+  @JoinColumn(name = "company_id")
+  private Company company;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+  public int getId() {
+    return id;
+  }
 
-    public String getGender() {
-        return gender;
-    }
+  public void setId(int id) {
+    this.id = id;
+  }
 
-    public int getAge() {
-        return age;
-    }
+  public String getGender() {
+    return gender;
+  }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
+  public int getAge() {
+    return age;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setAge(int age) {
+    this.age = age;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setCompany(Company company) {
-        this.company = company;
-    }
+  public void setGender(String gender) {
+    this.gender = gender;
+  }
+
+  public void setCompany(Company company) {
+    this.company = company;
+  }
 }

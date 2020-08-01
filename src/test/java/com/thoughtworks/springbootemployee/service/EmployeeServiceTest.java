@@ -1,6 +1,5 @@
 package com.thoughtworks.springbootemployee.service;
 
-import com.thoughtworks.springbootemployee.dto.EmployeeDto;
 import com.thoughtworks.springbootemployee.dto.EmployeeRequestDto;
 import com.thoughtworks.springbootemployee.entity.Company;
 import com.thoughtworks.springbootemployee.entity.Employee;
@@ -20,119 +19,118 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class EmployeeServiceTest {
-    @Mock
-    EmployeeRepository employeeRepository;
-    @Mock
-    CompanyRepository companyRepository;
-    @InjectMocks
-    EmployeeService employeeService;
+  @Mock EmployeeRepository employeeRepository;
+  @Mock CompanyRepository companyRepository;
+  @InjectMocks EmployeeService employeeService;
 
-    @Test
-    public void should_get_1_employee_when_get_employee_given_employee_id_1() {
-        // given
-        int employeeId = 1;
-        Employee employee = new Employee();
-        when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
+  @Test
+  public void should_get_1_employee_when_get_employee_given_employee_id_1() {
+    // given
+    int employeeId = 1;
+    Employee employee = new Employee();
+    when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
 
-        // when
-        Employee getEmployee = employeeService.getEmployee(employeeId);
+    // when
+    Employee getEmployee = employeeService.getEmployee(employeeId);
 
-        // then
-        assertNotNull(getEmployee);
-    }
+    // then
+    assertNotNull(getEmployee);
+  }
 
-    @Test
-    public void should_throw_exception_when_get_employee_given_employee_id_1() {
-        // given
-        int employeeId = 1;
-        Employee employee = new Employee();
-        when(employeeRepository.findById(employeeId)).thenReturn(Optional.empty());
-        // when
-        EmployeeNotFoundException employeeNotFoundException
-                = assertThrows(EmployeeNotFoundException.class, () -> employeeService.getEmployee(1));
+  @Test
+  public void should_throw_exception_when_get_employee_given_employee_id_1() {
+    // given
+    int employeeId = 1;
+    Employee employee = new Employee();
+    when(employeeRepository.findById(employeeId)).thenReturn(Optional.empty());
+    // when
+    EmployeeNotFoundException employeeNotFoundException =
+        assertThrows(EmployeeNotFoundException.class, () -> employeeService.getEmployee(1));
 
-        // then
-        assertEquals("EmployeeNotFoundException", employeeNotFoundException.getMessage());
-    }
+    // then
+    assertEquals("EmployeeNotFoundException", employeeNotFoundException.getMessage());
+  }
 
-    @Test
-    public void should_return_1_employee_when_add_employee_given_1_employee_request_dto() {
-        //given
-        Company company = new Company();
+  @Test
+  public void should_return_1_employee_when_add_employee_given_1_employee_request_dto() {
+    // given
+    Company company = new Company();
 
-        EmployeeRequestDto employeeRequestDto = new EmployeeRequestDto();
-        employeeRequestDto.setName("LLL");
-        employeeRequestDto.setAge(11);
-        employeeRequestDto.setGender("male");
-        employeeRequestDto.setCompanyId(1);
+    EmployeeRequestDto employeeRequestDto = new EmployeeRequestDto();
+    employeeRequestDto.setName("LLL");
+    employeeRequestDto.setAge(11);
+    employeeRequestDto.setGender("male");
+    employeeRequestDto.setCompanyId(1);
 
-        Employee employee = new Employee();
-        employee.setName("LLL");
-        employee.setAge(11);
-        employee.setGender("male");
-        employee.setCompany(company);
+    Employee employee = new Employee();
+    employee.setName("LLL");
+    employee.setAge(11);
+    employee.setGender("male");
+    employee.setCompany(company);
 
+    when(companyRepository.findById(anyInt())).thenReturn(Optional.of(company));
+    when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
+    // when
+    Employee employeeSaved = employeeService.addEmployee(employeeRequestDto);
+    // then
+    assertEquals("LLL", employeeSaved.getName());
+  }
 
-        when(companyRepository.findById(anyInt())).thenReturn(Optional.of(company));
-        when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
-        //when
-        Employee employeeSaved = employeeService.addEmployee(employeeRequestDto);
-        //then
-        assertEquals("LLL", employeeSaved.getName());
-    }
+  @Test
+  public void
+      should_throw_exception_when_add_employee_given_1_employee_dto_and_company_is_not_exist() {
+    // given
+    EmployeeRequestDto employeeRequestDto = new EmployeeRequestDto();
+    employeeRequestDto.setName("LLL");
+    employeeRequestDto.setAge(11);
+    employeeRequestDto.setGender("male");
+    employeeRequestDto.setCompanyId(1);
+    when(companyRepository.findById(anyInt())).thenReturn(Optional.empty());
+    // when
+    CompanyNotFoundException companyNotFoundException =
+        assertThrows(
+            CompanyNotFoundException.class, () -> employeeService.addEmployee(employeeRequestDto));
+    // then
+    assertEquals("CompanyNotFoundException", companyNotFoundException.getMessage());
+  }
 
-    @Test
-    public void should_throw_exception_when_add_employee_given_1_employee_dto_and_company_is_not_exist() {
-        //given
-        EmployeeRequestDto employeeRequestDto = new EmployeeRequestDto();
-        employeeRequestDto.setName("LLL");
-        employeeRequestDto.setAge(11);
-        employeeRequestDto.setGender("male");
-        employeeRequestDto.setCompanyId(1);
-        when(companyRepository.findById(anyInt())).thenReturn(Optional.empty());
-        //when
-        CompanyNotFoundException companyNotFoundException
-                = assertThrows(CompanyNotFoundException.class, () -> employeeService.addEmployee(employeeRequestDto));
-        //then
-        assertEquals("CompanyNotFoundException", companyNotFoundException.getMessage());
-    }
+  @Test
+  public void should_return_employee_when_update_employee_given_1_employee_request_dto() {
+    // given
+    Company company = new Company();
 
-    @Test
-    public void should_return_employee_when_update_employee_given_1_employee_request_dto() {
-        //given
-        Company company = new Company();
+    int id = 1;
+    Employee employee = new Employee();
+    employee.setName("LLL");
+    employee.setAge(11);
+    employee.setGender("male");
 
-        int id = 1;
-        Employee employee = new Employee();
-        employee.setName("LLL");
-        employee.setAge(11);
-        employee.setGender("male");
+    EmployeeRequestDto employeeRequestDto = new EmployeeRequestDto();
+    employeeRequestDto.setName("LLL");
+    employeeRequestDto.setAge(11);
+    employeeRequestDto.setGender("male");
+    employeeRequestDto.setCompanyId(1);
+    when(companyRepository.findById(anyInt())).thenReturn(Optional.of(company));
+    // when
+    Employee updateEmployee = employeeService.updateEmployee1(id, employeeRequestDto);
+    // then
+    assertEquals("LLL", updateEmployee.getName());
+  }
 
-        EmployeeRequestDto employeeRequestDto = new EmployeeRequestDto();
-        employeeRequestDto.setName("LLL");
-        employeeRequestDto.setAge(11);
-        employeeRequestDto.setGender("male");
-        employeeRequestDto.setCompanyId(1);
-        when(companyRepository.findById(anyInt())).thenReturn(Optional.of(company));
-        //when
-        Employee updateEmployee = employeeService.updateEmployee1(id, employeeRequestDto);
-        //then
-        assertEquals("LLL",updateEmployee.getName());
-    }
-
-    @Test
-    public void should_return_employee_when_employee_by_gender_given_male() {
-        //given
-        Employee employee = new Employee();
-        employee.setGender("male");
-        when(employeeRepository.findByGender("male")).thenReturn(Collections.singletonList(employee));
-        //when
-        List<Employee> maleEmployee = employeeService.getEmployeeByGender("male");
-        //then
-        assertEquals(1, maleEmployee.size());
-    }
+  @Test
+  public void should_return_employee_when_employee_by_gender_given_male() {
+    // given
+    Employee employee = new Employee();
+    employee.setGender("male");
+    when(employeeRepository.findByGender("male")).thenReturn(Collections.singletonList(employee));
+    // when
+    List<Employee> maleEmployee = employeeService.getEmployeeByGender("male");
+    // then
+    assertEquals(1, maleEmployee.size());
+  }
 }

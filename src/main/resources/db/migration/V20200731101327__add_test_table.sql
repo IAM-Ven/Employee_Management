@@ -1,5 +1,5 @@
-create table test_table(
-    id int not null,
+create table test_table
+(
+    id   int         not null,
     name varchar(30) not null
-
 )

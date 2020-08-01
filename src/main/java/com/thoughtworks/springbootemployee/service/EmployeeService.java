@@ -17,56 +17,59 @@ import java.util.List;
 @Service
 public class EmployeeService {
 
-    private final EmployeeRepository employeeRepository;
-    private final CompanyRepository companyRepository;
+  private final EmployeeRepository employeeRepository;
+  private final CompanyRepository companyRepository;
 
-    public EmployeeService(EmployeeRepository employeeRepository, CompanyRepository companyRepository) {
-        this.employeeRepository = employeeRepository;
-        this.companyRepository = companyRepository;
-    }
+  public EmployeeService(
+      EmployeeRepository employeeRepository, CompanyRepository companyRepository) {
+    this.employeeRepository = employeeRepository;
+    this.companyRepository = companyRepository;
+  }
 
-    public Employee getEmployee(int id) {
-        return employeeRepository.findById(id).orElseThrow(EmployeeNotFoundException::new);
-    }
+  public Employee getEmployee(int id) {
+    return employeeRepository.findById(id).orElseThrow(EmployeeNotFoundException::new);
+  }
 
-    public List<Employee> getEmployeeByGender(String gender) {
-        return employeeRepository.findByGender(gender);
-    }
+  public List<Employee> getEmployeeByGender(String gender) {
+    return employeeRepository.findByGender(gender);
+  }
 
-    public Page<Employee> getEmployeeByPage(Pageable pageable) {
-        return employeeRepository.findAll(pageable);
-    }
+  public Page<Employee> getEmployeeByPage(Pageable pageable) {
+    return employeeRepository.findAll(pageable);
+  }
 
+  public Employee addEmployee(EmployeeRequestDto employeeRequestDto) {
+    Company company =
+        companyRepository
+            .findById(employeeRequestDto.getCompanyId())
+            .orElseThrow(CompanyNotFoundException::new);
+    Employee employee = new Employee();
+    employee.setGender(employeeRequestDto.getGender());
+    employee.setAge(employeeRequestDto.getAge());
+    employee.setName(employeeRequestDto.getName());
+    employee.setCompany(company);
+    return employeeRepository.save(employee);
+  }
 
-    public Employee addEmployee(EmployeeRequestDto employeeRequestDto) {
-        Company company = companyRepository.findById(employeeRequestDto.getCompanyId()).orElseThrow(CompanyNotFoundException::new);
-        Employee employee = new Employee();
-        employee.setGender(employeeRequestDto.getGender());
-        employee.setAge(employeeRequestDto.getAge());
-        employee.setName(employeeRequestDto.getName());
-        employee.setCompany(company);
-        return employeeRepository.save(employee);
-    }
+  public Employee updateEmployee(EmployeeDto employeeDto) {
+    Company company = companyRepository.findById(employeeDto.getCompanyId()).get();
+    Employee employee = employeeDto.to();
+    employee.setCompany(company);
+    return employeeRepository.save(employee);
+  }
 
-    public Employee updateEmployee(EmployeeDto employeeDto) {
-        Company company = companyRepository.findById(employeeDto.getCompanyId()).get();
-        Employee employee = employeeDto.to();
-        employee.setCompany(company);
-        return employeeRepository.save(employee);
-    }
+  public Employee updateEmployee1(int id, EmployeeRequestDto employeeRequestDto) {
+    Company company = companyRepository.findById(employeeRequestDto.getCompanyId()).get();
+    Employee employee = new Employee();
+    employee.setCompany(company);
+    employee.setGender(employeeRequestDto.getGender());
+    employee.setAge(employeeRequestDto.getAge());
+    employee.setName(employeeRequestDto.getName());
+    employee.setId(id);
+    return employeeRepository.save(employee);
+  }
 
-    public Employee updateEmployee1(int id,EmployeeRequestDto employeeRequestDto) {
-        Company company = companyRepository.findById(employeeRequestDto.getCompanyId()).get();
-        Employee employee = new Employee();
-        employee.setCompany(company);
-        employee.setGender(employeeRequestDto.getGender());
-        employee.setAge(employeeRequestDto.getAge());
-        employee.setName(employeeRequestDto.getName());
-        employee.setId(id);
-        return employeeRepository.save(employee);
-    }
-
-    public void deleteEmployee(int id) {
-        employeeRepository.deleteById(id);
-    }
+  public void deleteEmployee(int id) {
+    employeeRepository.deleteById(id);
+  }
 }
