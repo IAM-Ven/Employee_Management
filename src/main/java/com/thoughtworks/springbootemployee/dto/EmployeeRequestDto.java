@@ -3,6 +3,7 @@ package com.thoughtworks.springbootemployee.dto;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class EmployeeRequestDto {
 
@@ -12,7 +13,7 @@ public class EmployeeRequestDto {
   @Min(0)
   private int age;
 
-  @NotBlank private int companyId;
+  private int companyId;
   @NotBlank private String gender;
 
   public EmployeeRequestDto() {}
